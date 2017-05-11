@@ -193,7 +193,10 @@ class NukeInternal(object):
             elif action == "setitem":
                 obj[params[0]] = params[1]
             elif action == "call":
-                result = nuke.executeInMainThreadWithResult(obj, args=params['args'], kwargs=params['kwargs'])
+                if nuke.NUKE_VERSION_MAJOR < 10:
+                    result = nuke.executeInMainThreadWithResult(obj, args=params['args'], kwargs=params['kwargs'])
+                else:
+                    result = obj(*params['args'], **params['kwargs'])
             elif action == "len":
                 result = len(obj)
             elif action == "str":
